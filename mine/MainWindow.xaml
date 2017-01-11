@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mine"
         mc:Ignorable="d"
-        Icon="bomb.png"
+        Icon="bomb.png" ResizeMode="CanMinimize"
         Title="扫雷游戏 developed by 熊跃辉"  Height="600" Width="500">
     <Window.Resources>
         <ResourceDictionary>
@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <StackPanel Orientation="Horizontal" x:Name="topArea" Margin="0,0,0,460" Background="Aquamarine" >
+        <StackPanel Orientation="Horizontal" x:Name="topArea" Margin="0,0,0,460" Background="DarkBlue" >
             <Button x:Name="btnSimple" Margin="20,30,20,40" Content="简易" Click="btnSimple_Click" Width="56"/>
             <Button x:Name="btnMiddle"   Content="中等" Click="btnMiddle_Click" Width="56" Margin="0,30,20,40"/>
             <Button x:Name="btnDiff"   Content="困难" Click="btnDiff_Click" Width="56" Margin="0,30,20,40"/>

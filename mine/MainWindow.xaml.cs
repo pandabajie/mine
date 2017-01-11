@@ -282,5 +282,10 @@ namespace mine
             }
             
         }
+
+        private void btnEye_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
