@@ -20,10 +20,6 @@
             <Button x:Name="btnMiddle"   Content="中等" Click="btnMiddle_Click" Width="56" Margin="0,30,20,40"/>
             <Button x:Name="btnDiff"   Content="困难" Click="btnDiff_Click" Width="56" Margin="0,30,20,40"/>
             <Button x:Name="btnBig"   Content="开启作弊" Click="btnBig_Click" Width="80" Margin="0,30,20,40"/>
-            <Label x:Name="labelInfo" Content="" Width="157" Margin="0,20,20,50"/>
-            <!-- 
-            <Button x:Name="btnOpen"   Content="剧透模式" Click="btnOpen_Click" Width="70" Margin="0,20,20,50"/>
-            -->
         </StackPanel>
         <Grid x:Name="gameArea" Margin="0,100,0,0"></Grid>
     </Grid>

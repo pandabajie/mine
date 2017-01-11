@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+* 命名空间: mine
+*
+* 功 能： 扫雷游戏主页
+*
+* Ver 变更日期 负责人 变更内容
+* ───────────────────────────────────
+* V1.0 2017-01-10 熊跃辉 初版
+*
+* Copyright (c) 2017 熊跃辉. All rights reserved.
+*┌──────────────────────────────────┐
+*│　此技术信息为本人机密信息，未经本人书面同意禁止向第三方披露．　│
+*│　版权所有：熊跃辉 　　　　　　　　　　　　　　│
+*└──────────────────────────────────┘
+*/
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace mine
 {
-
     public partial class MainWindow : Window
     {
-
         private int size = 10;
         private int[,] BombArray;
         private int BombSeed = 5;
@@ -33,14 +36,20 @@ namespace mine
         //是否开启作弊模式
         private bool isBig = false;
 
-
+        /// <summary>
+        /// 主窗口
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             initGrid();
         }
 
-
+        /// <summary>
+        /// 单击方块事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -88,6 +97,11 @@ namespace mine
             }
         }
 
+        /// <summary>
+        /// 添加红旗
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         private void add_red_flag(int x,int y)
         {
             Image img = new Image();
@@ -100,6 +114,11 @@ namespace mine
             this.gameArea.Children.Add(img);
         }
 
+        /// <summary>
+        /// 鼠标右击事件，主要是添加红旗
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_right_click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -109,6 +128,11 @@ namespace mine
             this.add_red_flag(x, y);
         }
 
+        /// <summary>
+        /// 点击红旗，即取消地雷选定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void img_right_click(object sender, RoutedEventArgs e)
         {
             Image img = sender as Image;
@@ -118,22 +142,24 @@ namespace mine
             Console.WriteLine(x + "," + y);
         }
 
+        /// <summary>
+        /// 初始化布局
+        /// </summary>
         private void initGrid()
         {
+            //布雷随机位置
             BombArray = this.CreateRank2Array(size);
+            //开始布雷
             for (int i = 0; i < this.size; i++)
             {
                 RowDefinition rowDefinition = new RowDefinition();
                 this.gameArea.RowDefinitions.Add(rowDefinition);
             }
-
             for (int i = 0; i < this.size; i++)
             {
                 ColumnDefinition columnDefinition = new ColumnDefinition();
                 this.gameArea.ColumnDefinitions.Add(columnDefinition);
             }
-
-
             for (int i = 0; i < this.gameArea.ColumnDefinitions.Count; i++)
             {
                 for (int j = 0; j < this.gameArea.RowDefinitions.Count; j++)
@@ -152,10 +178,10 @@ namespace mine
                     else
                     {
                         //计算周围藏雷的数量
-                        Label lab = new Label();
                         int cb = this.countBomb(i, j);
                         if (cb > 0)
                         {
+                            Label lab = new Label();
                             lab.Content = cb;
                             lab.FontSize = 16;
                             lab.HorizontalAlignment = HorizontalAlignment.Center;
@@ -174,9 +200,13 @@ namespace mine
                     this.gameArea.Children.Add(btn);
                 }
             }
-            // labelInfo.Content = "地雷数：" + (this.size + this.BombSeed); ;
         }
 
+        /// <summary>
+        /// 获取地雷位置
+        /// </summary>
+        /// <param name="Length"></param>
+        /// <returns></returns>
         private int[,] CreateRank2Array(int Length)
         {
             Random rand = new Random();
@@ -194,6 +224,12 @@ namespace mine
             return returnArray;
         }
 
+        /// <summary>
+        /// 根据指定位置处理地雷数量
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private int countBomb(int x, int y)
         {
             int tmpCount = 0;
@@ -233,6 +269,11 @@ namespace mine
             return tmpCount;
         }
 
+        /// <summary>
+        /// 简单模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSimple_Click(object sender, RoutedEventArgs e)
         {
             this.BombSeed = this.BombSimpleSeed;
@@ -240,6 +281,9 @@ namespace mine
             this.start();
         }
 
+        /// <summary>
+        /// 开始游戏
+        /// </summary>
         private void start()
         {
             BombArray = new int[,] { };
@@ -249,6 +293,11 @@ namespace mine
             initGrid();
         }
 
+        /// <summary>
+        /// 中等模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMiddle_Click(object sender, RoutedEventArgs e)
         {
             this.BombSeed = this.BombMiddleSeed;
@@ -256,18 +305,23 @@ namespace mine
             this.start();
         }
 
+        /// <summary>
+        /// 困难模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDiff_Click(object sender, RoutedEventArgs e)
         {
             this.BombSeed = this.BombDiffSeed;
             this.size = this.SizeDiffSeed;
             this.start();
         }
-
-        private void btnOpen_Click(object sender, RoutedEventArgs e)
-        {
-            //this.gameArea.FindResource();
-        }
-
+  
+        /// <summary>
+        /// 开启作弊模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBig_Click(object sender, RoutedEventArgs e)
         {
             if (this.isBig == false)
@@ -280,12 +334,6 @@ namespace mine
                 this.isBig = false;
                 this.btnBig.Content = "开启作弊";
             }
-            
-        }
-
-        private void btnEye_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
