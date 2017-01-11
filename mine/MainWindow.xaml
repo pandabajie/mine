@@ -1,0 +1,28 @@
+﻿<Window x:Class="mine.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mine"
+        mc:Ignorable="d"
+        Title="扫雷游戏" Height="600" Width="500">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="BureauBlack.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Orientation="Horizontal" x:Name="topArea" Height="100" Margin="0,0,0,500" >
+            <Button x:Name="btnSimple" Margin="20,20,20,50" Content="简易" Click="btnSimple_Click" Width="56"/>
+            <Button x:Name="btnMiddle"   Content="中等" Click="btnMiddle_Click" Width="56" Margin="0,20,20,50"/>
+            <Button x:Name="btnDiff"   Content="困难" Click="btnDiff_Click" Width="56" Margin="0,20,20,50"/>
+            <Label x:Name="labelInfo" Content="" Width="157" Margin="0,20,20,50"/>
+            <!-- 
+            <Button x:Name="btnOpen"   Content="剧透模式" Click="btnOpen_Click" Width="70" Margin="0,20,20,50"/>
+            -->
+        </StackPanel>
+        <Grid x:Name="gameArea" Margin="0,100,0,0"></Grid>
+    </Grid>
+</Window>
