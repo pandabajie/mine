@@ -23,8 +23,15 @@ namespace mine
 
         private int size = 10;
         private int[,] BombArray;
-        private int BombSeed = 50;
-
+        private int BombSeed = 5;
+        private int BombSimpleSeed = 5;
+        private int BombMiddleSeed = 50;
+        private int BombDiffSeed = 100;
+        private int SizeSimpleSeed = 5;
+        private int SizeMiddleSeed = 10;
+        private int SizeDiffSeed = 15;
+        //是否开启作弊模式
+        private bool isBig = false;
 
 
         public MainWindow()
@@ -39,23 +46,50 @@ namespace mine
             Button btn = sender as Button;
             int y = Grid.GetRow(btn);
             int x = Grid.GetColumn(btn);
-            this.gameArea.Children.Remove(btn);
+            
             Console.WriteLine(x + "," + y);
             if (BombArray[x, y] == 1)
             {
-
-                MessageBox.Show("游戏结束");
-                start();
+                if (isBig == false)
+                {
+                    this.gameArea.Children.Remove(btn);
+                    MessageBox.Show("游戏结束");
+                    this.start();
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("这是地雷哦");
+                    this.add_red_flag(x,y);
+                    return;
+                }
+                
             }
-
+            this.gameArea.Children.Remove(btn);
+            if (BombArray[x, y] == 0)
+            {
+                //标记已翻开过
+                BombArray[x, y] = 2;
+            }
+            //检查是否胜利
+            bool isRight = true;
+            for (int i = 0; i < this.gameArea.ColumnDefinitions.Count; i++)
+            {
+                for (int j = 0; j < this.gameArea.RowDefinitions.Count; j++)
+                {
+                    if (BombArray[i, j] == 0) {
+                        isRight = false;
+                    } ;
+                }
+            }
+            if (isRight == true)
+            {
+                MessageBox.Show("恭喜您获胜");
+            }
         }
 
-        private void btn_right_click(object sender, RoutedEventArgs e)
+        private void add_red_flag(int x,int y)
         {
-            Button btn = sender as Button;
-            int y = Grid.GetRow(btn);
-            int x = Grid.GetColumn(btn);
-            Console.WriteLine(x + "," + y);
             Image img = new Image();
             img.Width = 500 / this.size;
             img.Height = 500 / this.size;
@@ -64,6 +98,15 @@ namespace mine
             Grid.SetRow(img, y);
             img.MouseRightButtonDown += new MouseButtonEventHandler(img_right_click);
             this.gameArea.Children.Add(img);
+        }
+
+        private void btn_right_click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            int y = Grid.GetRow(btn);
+            int x = Grid.GetColumn(btn);
+            Console.WriteLine(x + "," + y);
+            this.add_red_flag(x, y);
         }
 
         private void img_right_click(object sender, RoutedEventArgs e)
@@ -115,7 +158,8 @@ namespace mine
                         {
                             lab.Content = cb;
                             lab.FontSize = 16;
-                            //lab.HorizontalAlignment = "Center";
+                            lab.HorizontalAlignment = HorizontalAlignment.Center;
+                            lab.VerticalAlignment = VerticalAlignment.Center;
                             Grid.SetColumn(lab, i);
                             Grid.SetRow(lab, j);
                             this.gameArea.Children.Add(lab);
@@ -191,8 +235,8 @@ namespace mine
 
         private void btnSimple_Click(object sender, RoutedEventArgs e)
         {
-            this.BombSeed = 10;
-            this.size = 5;
+            this.BombSeed = this.BombSimpleSeed;
+            this.size = this.SizeSimpleSeed;
             this.start();
         }
 
@@ -207,21 +251,36 @@ namespace mine
 
         private void btnMiddle_Click(object sender, RoutedEventArgs e)
         {
-            this.BombSeed = 50;
-            this.size = 10;
+            this.BombSeed = this.BombMiddleSeed;
+            this.size = this.SizeMiddleSeed;
             this.start();
         }
 
         private void btnDiff_Click(object sender, RoutedEventArgs e)
         {
-            this.BombSeed = 100;
-            this.size = 20;
+            this.BombSeed = this.BombDiffSeed;
+            this.size = this.SizeDiffSeed;
             this.start();
         }
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
             //this.gameArea.FindResource();
+        }
+
+        private void btnBig_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.isBig == false)
+            {
+                this.isBig = true;
+                this.btnBig.Content = "取消作弊";
+            }
+            else
+            {
+                this.isBig = false;
+                this.btnBig.Content = "开启作弊";
+            }
+            
         }
     }
 }
