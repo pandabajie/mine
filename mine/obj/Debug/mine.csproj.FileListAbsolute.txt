@@ -19,3 +19,7 @@ F:\work\git\myself\mine\mine\obj\Debug\ExpressionLight.baml
 F:\work\git\myself\mine\mine\obj\Debug\ShinyBlue.baml
 F:\work\git\myself\mine\mine\obj\Debug\ShinyRed.baml
 F:\work\git\myself\mine\mine\obj\Debug\WhistlerBlue.baml
+F:\work\git\myself\mine\mine\bin\Debug\mine.exe.manifest
+F:\work\git\myself\mine\mine\bin\Debug\mine.application
+F:\work\git\myself\mine\mine\obj\Debug\mine.exe.manifest
+F:\work\git\myself\mine\mine\obj\Debug\mine.application

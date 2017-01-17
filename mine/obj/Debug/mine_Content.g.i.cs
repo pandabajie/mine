@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bomb.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("timg.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bomb_32x32.ico")]
 
 
