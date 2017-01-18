@@ -17,8 +17,10 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-
+using System.Windows.Shapes;
 
 namespace mine
 {
@@ -62,6 +64,13 @@ namespace mine
                 if (isBig == false)
                 {
                     this.gameArea.Children.Remove(btn);
+                    Image img = new Image();
+                    img.Width = 500 / this.size;
+                    img.Height = 500 / this.size;
+                    img.Source = new BitmapImage(new Uri("pack://application:,,,/bomb.png"));
+                    Grid.SetColumn(img, x);
+                    Grid.SetRow(img, y);
+                    this.gameArea.Children.Add(img);
                     MessageBox.Show("游戏结束");
                     this.start();
                     return;
@@ -69,10 +78,26 @@ namespace mine
                 else
                 {
                     MessageBox.Show("这是地雷哦");
-                    this.add_red_flag(x,y);
+                    this.add_red_flag(x, y);
                     return;
                 }
-                
+            }
+            else
+            {
+                //计算周围藏雷的数量
+                int cb = this.countBomb(x, y);
+                if (cb > 0)
+                {
+                    Label lab = new Label();
+                    lab.Content = cb;
+                    lab.FontSize = 32;
+                    lab.HorizontalAlignment = HorizontalAlignment.Center;
+                    lab.VerticalAlignment = VerticalAlignment.Center;
+                    Grid.SetColumn(lab, x);
+                    Grid.SetRow(lab, y);
+                    lab.MouseLeftButtonDown += new MouseButtonEventHandler(lab_double_click);
+                    this.gameArea.Children.Add(lab);
+                }
             }
             this.gameArea.Children.Remove(btn);
             if (BombArray[x, y] == 0)
@@ -147,6 +172,7 @@ namespace mine
         /// </summary>
         private void initGrid()
         {
+            this.gameArea.Background = Brushes.White;
             //布雷随机位置
             BombArray = this.CreateRank2Array(size);
             //开始布雷
@@ -165,33 +191,7 @@ namespace mine
                 for (int j = 0; j < this.gameArea.RowDefinitions.Count; j++)
                 {
 
-                    if (BombArray[i, j] == 1)
-                    {
-                        Image img = new Image();
-                        img.Width = 500 / this.size;
-                        img.Height = 500 / this.size;
-                        img.Source = new BitmapImage(new Uri("pack://application:,,,/bomb.png"));
-                        Grid.SetColumn(img, i);
-                        Grid.SetRow(img, j);
-                        this.gameArea.Children.Add(img);
-                    }
-                    else
-                    {
-                        //计算周围藏雷的数量
-                        int cb = this.countBomb(i, j);
-                        if (cb > 0)
-                        {
-                            Label lab = new Label();
-                            lab.Content = cb;
-                            lab.FontSize = 16;
-                            lab.HorizontalAlignment = HorizontalAlignment.Center;
-                            lab.VerticalAlignment = VerticalAlignment.Center;
-                            Grid.SetColumn(lab, i);
-                            Grid.SetRow(lab, j);
-                            this.gameArea.Children.Add(lab);
-                        }
-
-                    }
+                    
                     Button btn = new Button();
                     Grid.SetColumn(btn, i);
                     Grid.SetRow(btn, j);
@@ -201,6 +201,100 @@ namespace mine
                 }
             }
         }
+
+
+        /// <summary>
+        /// 点击数字出现双击事件
+        /// </summary>
+        int iC = 0;
+        private void lab_double_click(object sender, RoutedEventArgs e)
+        {
+            Label lab = sender as Label;
+            int y = Grid.GetRow(lab);
+            int x = Grid.GetColumn(lab);
+
+            iC += 1;
+            System.Timers.Timer t = new System.Timers.Timer(600);
+            t.Interval = 600;
+
+            t.Elapsed += (s, ee) => { t.Enabled = false; iC = 0; };
+            t.Enabled = true;
+            if (iC % 2 == 0)
+            {
+                t.Enabled = false;
+                iC = 0;
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(this.gameArea); i++)
+                {
+                    var child = VisualTreeHelper.GetChild(this.gameArea, i);
+                    if (child is Button)
+                    {
+                        Button btn = child as Button;
+                        int a = Grid.GetColumn(btn);
+                        int b = Grid.GetRow(btn);
+                        if (a == x - 1 && b == y - 1)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x - 1 && b == y)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x - 1 && b == y+1)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x  && b == y - 1)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x && b == y + 1)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x + 1 && b == y - 1)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x + 1 && b == y)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                        if (a == x + 1 && b == y + 1)
+                        {
+                            this.btnAnimate(btn);
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// 按钮动画
+        /// </summary>
+        /// <param name="btn"></param>
+        public void btnAnimate(Button btn)
+        {
+            int a = Grid.GetColumn(btn);
+            int b = Grid.GetRow(btn);
+            Console.WriteLine(a+"---"+b);
+            //动画定义
+            Storyboard myStoryboard = new Storyboard();
+            //透明度由0-1的变化动画 
+            DoubleAnimation OpacityDoubleAnimation = new DoubleAnimation();
+            OpacityDoubleAnimation.From = 0.5;
+            OpacityDoubleAnimation.To = 1;
+            OpacityDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(1.4));
+            //设置动画对象名称
+            Storyboard.SetTarget(OpacityDoubleAnimation, btn);
+            //设置动画属性
+            Storyboard.SetTargetProperty(OpacityDoubleAnimation, new PropertyPath(Grid.OpacityProperty));
+            myStoryboard.Children.Add(OpacityDoubleAnimation);
+            //开始动画
+            myStoryboard.Begin(this.gameArea);
+        }
+
+
 
         /// <summary>
         /// 获取地雷位置
@@ -219,7 +313,6 @@ namespace mine
                 int y = rand.Next(int_From, int_intTo);
                 Console.WriteLine(x + "," + y);
                 returnArray[x, y] = 1;
-
             }
             return returnArray;
         }
