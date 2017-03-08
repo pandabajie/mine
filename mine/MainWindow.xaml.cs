@@ -190,8 +190,6 @@ namespace mine
             {
                 for (int j = 0; j < this.gameArea.RowDefinitions.Count; j++)
                 {
-
-                    
                     Button btn = new Button();
                     Grid.SetColumn(btn, i);
                     Grid.SetRow(btn, j);
@@ -307,12 +305,19 @@ namespace mine
             int[,] returnArray = new int[Length, Length];
             int int_From = 0;
             int int_intTo = Length - 1;
-            for (int i = 0; i < Length + this.BombSeed; i++)
+            for (int i = 0; i < Length; i++)
             {
                 int x = rand.Next(int_From, int_intTo);
                 int y = rand.Next(int_From, int_intTo);
                 Console.WriteLine(x + "," + y);
-                returnArray[x, y] = 1;
+                if (returnArray[x, y] == 1)
+                {
+                    i--;
+                }
+                else
+                {
+                    returnArray[x, y] = 1;
+                }
             }
             return returnArray;
         }
